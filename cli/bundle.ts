@@ -1,5 +1,14 @@
 const targets = Deno.args
 
+const sign = (n: string) =>
+`/*
+    Made by Gnlow
+    https://www.acmicpc.net/user/gnlowing
+    https://github.com/gnlow/boj/tree/main/problem/${n}
+*/
+
+`
+
 targets.forEach(
     async target => {
         const emitResult = await Deno.emit(
@@ -16,7 +25,11 @@ targets.forEach(
                 }
             }
         )
-        const bundled = emitResult.files["deno:///bundle.js"]
-        await Deno.writeTextFile(`dist/${target}.js`, bundled)
+        const bundled = sign(target) + emitResult.files["deno:///bundle.js"]
+        await Deno.writeTextFile(
+            `dist/${target}.js`, 
+            bundled
+        )
+        console.log(bundled)
     }
 )
