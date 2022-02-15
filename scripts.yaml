@@ -1,0 +1,2 @@
+scripts:
+  c: deno run --allow-write --allow-run --allow-read --unstable bundle.ts
