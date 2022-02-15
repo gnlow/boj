@@ -12,7 +12,7 @@ targets.forEach(
                         import { main } from "./main.ts"
                         console.log(main(require("fs").readFileSync("/dev/stdin")+""))
                     `,
-                    "/main.ts": await Deno.readTextFile(`${target}/main.ts`)
+                    "/main.ts": await Deno.readTextFile(`problem/${target}/main.ts`)
                 }
             }
         )
