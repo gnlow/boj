@@ -1,5 +1,8 @@
-export function main(input: string) {
-    const [[a, b]] = input.split("\n").map(x => x.split(" ").map(Number))
 
-    return a + b
-}
+import { flow } from "fp/function.ts"
+import { simplify } from "util/simplify.ts"
+
+export const main = flow(
+    simplify,
+    ([[a, b]]) => a + b
+)

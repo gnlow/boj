@@ -22,7 +22,14 @@ targets.forEach(
                         console.log(main(require("fs").readFileSync("/dev/stdin")+""))
                     `,
                     "/main.ts": await Deno.readTextFile(`problem/${target}/main.ts`)
-                }
+                },
+                importMap: {
+                    "imports": {
+                        "fp/": "https://denopkg.com/gnlow/deno-fp-ts/src/",
+                        "util/": "./util/"
+                    }
+                },
+                importMapPath: "import_map.json"
             }
         )
         const bundled = sign(target) + emitResult.files["deno:///bundle.js"]
