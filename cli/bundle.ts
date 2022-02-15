@@ -11,6 +11,13 @@ const sign = (n: string) =>
 
 targets.forEach(
     async target => {
+        const main = await Deno.emit(
+            `problem/${target}/main.ts`,
+            {
+                bundle: "module",
+                importMapPath: "import_map.json"
+            }
+        )
         const emitResult = await Deno.emit(
             `/run.ts`,
             {
@@ -21,15 +28,8 @@ targets.forEach(
                         import { main } from "./main.ts"
                         console.log(main(require("fs").readFileSync("/dev/stdin")+""))
                     `,
-                    "/main.ts": await Deno.readTextFile(`problem/${target}/main.ts`)
-                },
-                importMap: {
-                    "imports": {
-                        "fp/": "https://denopkg.com/gnlow/deno-fp-ts/src/",
-                        "util/": "./util/"
-                    }
-                },
-                importMapPath: "import_map.json"
+                    "/main.ts": main.files["deno:///bundle.js"]
+                }
             }
         )
         const bundled = sign(target) + emitResult.files["deno:///bundle.js"]
