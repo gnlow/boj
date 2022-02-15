@@ -2,19 +2,18 @@ const targets = Deno.args
 
 targets.forEach(
     async target => {
-        await Deno.writeTextFile(
-            `temp/${target}.ts`,
-            `
-                import { main } from "../${target}/main.ts"
-                
-                console.log(main(require("fs").readFileSync("/dev/stdin")+""))
-            `
-        )
         const emitResult = await Deno.emit(
-            `temp/${target}.ts`,
+            `/run.ts`,
             {
                 bundle: "module",
                 check: false,
+                sources: {
+                    "/run.ts": `
+                        import { main } from "./main.ts"
+                        console.log(main(require("fs").readFileSync("/dev/stdin")+""))
+                    `,
+                    "/main.ts": await Deno.readTextFile(`${target}/main.ts`)
+                }
             }
         )
         const bundled = emitResult.files["deno:///bundle.js"]
