@@ -95,9 +95,7 @@
       ],
       "pure_getters": true
     },
-    "mangle": {
-        "toplevel": true
-    },
+    "mangle": true,
     "output": {},
     "parse": {},
     "rename": {}
