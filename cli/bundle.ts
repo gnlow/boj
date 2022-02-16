@@ -44,7 +44,17 @@ const sign = (n: string, source: string) =>
  */
 
 `
-
+const run = async (cmd: string) => {
+    const process = Deno.run({
+        cmd: cmd
+            .trim()
+            .split("\n")
+            .map(x => x.trim().split(" "))
+            .flat()
+    })
+    await process.status()
+    process.close()
+}
 targets.forEach(
     async target => {
         const main = await Deno.emit(
@@ -77,19 +87,16 @@ targets.forEach(
             bundled
         )
 
-        const process = Deno.run({
-            cmd: [
-                "cmd",
-                "/c",
-                "terser",
-                "dist/1000.js",
-                "-o",
-                "dist/1000.min.js",
-                "--config-file",
-                "terser.config.json"
-            ]
-        })
-        await process.status()
-        process.close()
+        run(`
+            cmd /c
+            terser
+            dist/${target}.js
+            -o dist/${target}.min.js
+            --config-file terser.config.json
+        `)
+        run(`
+            cmd /c
+            code dist/${target}.min.js
+        `)
     }
 )
