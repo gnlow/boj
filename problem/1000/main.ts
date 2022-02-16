@@ -1,4 +1,3 @@
-
 import { flow } from "fp/function.ts"
 import { simplify } from "util/simplify.ts"
 
