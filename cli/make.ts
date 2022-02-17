@@ -5,7 +5,7 @@ const defaultCode =
 import { simplify } from "util/simplify.ts"
 
 export const main = flow(
-    
+    simplify,
 )`
 
 targets.forEach(
