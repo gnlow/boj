@@ -87,14 +87,14 @@ targets.forEach(
             bundled
         )
 
-        run(`
+        await run(`
             cmd /c
             terser
             dist/${target}.js
             -o dist/${target}.min.js
             --config-file terser.config.json
         `)
-        run(`
+        await run(`
             cmd /c
             code dist/${target}.min.js
         `)
