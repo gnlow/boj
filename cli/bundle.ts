@@ -99,7 +99,7 @@ targets.forEach(
                 sources: {
                     "/run.ts": `
                         import { main } from "./main.ts"
-                        console.log(main(require("fs").readFileSync("/dev/stdin")+""))
+                        console.log(main(require("fs").readFileSync(0)+""))
                     `,
                     "/main.ts": main.files["deno:///bundle.js"]
                 }

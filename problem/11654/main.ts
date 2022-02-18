@@ -1,0 +1,1 @@
+export const main = (x: string) => x.charCodeAt(0)
