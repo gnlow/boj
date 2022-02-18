@@ -1,5 +1,5 @@
 import { flow } from "fp/function.ts"
-import { simplify } from "util/simplify.ts"
+import { simplifyNs } from "util/simplify.ts"
 import { bimap } from "fp/Tuple.ts"
 import { create } from "fp/std/Tuple.ts"
 import { map } from "fp/Array.ts"
@@ -9,7 +9,7 @@ import { Ord } from "fp/number.ts"
 import * as O from "fp/Option.ts"
 
 export const main = flow(
-    simplify,
+    simplifyNs,
     ([
         [_n],
         [...as],

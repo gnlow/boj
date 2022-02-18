@@ -1,5 +1,5 @@
 import { pipe, flow } from "fp/function.ts"
-import { simplify } from "util/simplify.ts"
+import { simplifyNs } from "util/simplify.ts"
 import { split } from "fp/string.ts"
 import {
     map,
@@ -33,7 +33,7 @@ const isHansu =
     )
 
 export const main = flow(
-    simplify,
+    simplifyNs,
     ([[n]]) => n,
     n => range(1, n),
     filter(isHansu),

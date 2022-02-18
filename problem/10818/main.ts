@@ -1,5 +1,5 @@
 import { pipe, flow } from "fp/function.ts"
-import { simplify } from "util/simplify.ts"
+import { simplifyNs } from "util/simplify.ts"
 import * as O from "fp/Option.ts"
 import { toArray } from "fp/ReadonlyArray.ts"
 import { fromArray, min, max, flap, NonEmptyArray } from "fp/NonEmptyArray.ts"
@@ -14,7 +14,7 @@ const assertNonEmpty =
     )
 
 export const main = flow(
-    simplify,
+    simplifyNs,
     ([_, ns]) => ns,
     toArray,
     assertNonEmpty,

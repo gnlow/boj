@@ -1,5 +1,5 @@
 import { flow, pipe } from "fp/function.ts"
-import { simplify } from "util/simplify.ts"
+import { simplifyNs } from "util/simplify.ts"
 import { range, map } from "fp/NonEmptyArray.ts"
 import { join } from "fp/std/Array.ts"
 
@@ -12,7 +12,7 @@ const gugudan =
     )
 
 export const main = flow(
-    simplify,
+    simplifyNs,
     ([[n]]) => n,
     gugudan,
 )

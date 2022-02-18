@@ -1,11 +1,11 @@
 import { flow } from "fp/function.ts"
-import { simplify } from "util/simplify.ts"
+import { simplifyNs } from "util/simplify.ts"
 import { flatten, reduceWithIndex } from "fp/ReadonlyArray.ts"
 import { map } from "fp/Array.ts"
 import { join } from "fp/std/Array.ts"
 
 export const main = flow(
-    simplify,
+    simplifyNs,
     flatten,
     reduceWithIndex(
         [0],

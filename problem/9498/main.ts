@@ -1,5 +1,5 @@
 import { flow } from "fp/function.ts"
-import { simplify } from "util/simplify.ts"
+import { simplifyNs } from "util/simplify.ts"
 import { chain, fromPredicate, fold } from "fp/Either.ts"
 import { not } from "fp/Predicate.ts"
 
@@ -16,7 +16,7 @@ const rangeThen =
     )
 
 export const main = flow(
-    simplify,
+    simplifyNs,
     ([[n]]) => n,
     rangeThen(90, 100, "A"),
     chain(rangeThen(80, 89, "B")),
