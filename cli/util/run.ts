@@ -4,8 +4,12 @@ export const run = async (cmd: string) => {
             .trim()
             .split("\n")
             .map(x => x.trim().split(" "))
-            .flat()
+            .flat(),
+        stdout: "piped",
+        stderr: "piped"
     })
-    await process.status()
+    const output = await process.output()
     process.close()
+
+    return new TextDecoder().decode(output)
 }

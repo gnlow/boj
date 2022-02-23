@@ -13,7 +13,7 @@ const log = (head: string) => function (str: string | string[]) {
         text = "\n    " + str.join("\n    ")
     }
     console.log(
-        head,
+        "\n" + head,
         c(deepskyblue)(text),
     )
 }
