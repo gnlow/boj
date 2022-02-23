@@ -19,6 +19,11 @@ scripts:
         --allow-read
         --allow-write
         cli/make.ts
+    download: &download >-
+        deno run
+        -A
+        --unstable
+        cli/download.ts
     purify: &purify >-
         deno run
         --allow-read
@@ -26,6 +31,7 @@ scripts:
     b: *bundle
     t: *test
     m: *make
+    d: *download
     p: *purify
 
     minify: >- # memo
