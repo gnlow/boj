@@ -1,4 +1,8 @@
+import { success, progress } from "./util/log.ts"
+import { run } from "./util/run.ts"
+
 export async function bundle(targets: number[]) {
+    progress("Start >bundle")
     const docify = (s: string) => s.split("\n").join("\n * ")
 
     const sign = (n: number, source: string) =>
@@ -70,17 +74,6 @@ export async function bundle(targets: number[]) {
      * SOFTWARE.
      */
     `
-    const run = async (cmd: string) => {
-        const process = Deno.run({
-            cmd: cmd
-                .trim()
-                .split("\n")
-                .map(x => x.trim().split(" "))
-                .flat()
-        })
-        await process.status()
-        process.close()
-    }
     await Promise.all(targets.map(
         async target => {
             const main = await Deno.emit(
@@ -90,6 +83,7 @@ export async function bundle(targets: number[]) {
                     importMapPath: "import_map.json"
                 }
             )
+            progress("Bundle 'problem/${target}/main.ts'")
             const emitResult = await Deno.emit(
                 `/run.ts`,
                 {
@@ -112,7 +106,7 @@ export async function bundle(targets: number[]) {
                 `dist/${target}.js`, 
                 bundled
             )
-
+            progress(`Generate 'dist/${target}.js'`)
             await run(`
                 cmd /c
                 terser
@@ -120,10 +114,12 @@ export async function bundle(targets: number[]) {
                 -o dist/${target}.min.js
                 --config-file terser.config.json
             `)
+            progress(`Minify 'dist/${target}.js' -> 'dist/${target}.min.js'`)
             await run(`
                 cmd /c
                 code dist/${target}.min.js
             `)
+            success(`Open dist/${target}.min.js`)
         }
     ))
 }

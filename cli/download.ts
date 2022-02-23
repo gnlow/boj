@@ -1,14 +1,17 @@
+import { success, progress } from "./util/log.ts"
 import pptr, * as P from "https://deno.land/x/puppeteer@9.0.2/mod.ts"
 import { stringify } from "https://deno.land/std@0.126.0/encoding/yaml.ts"
 
 export async function download(targets: number[]) {
+    progress("Start >download")
     const wsChromeEndpoint = "ws://localhost:9222/devtools/browser/634a8d6e-cbd2-4203-b588-ee93f9428294"
 
     const browser = await pptr.connect({
         browserWSEndpoint: wsChromeEndpoint,
     })
+    progress("Connect to browser")
     const page = await browser.newPage()
-
+    progress("Open new tab")
     await Promise.all(targets.map(
         async target => {
             await page.goto(`https://www.acmicpc.net/problem/${target}`)
@@ -35,7 +38,7 @@ export async function download(targets: number[]) {
                     return true
                 }
             )
-
+            progress(`Load 'https://www.acmicpc.net/problem/${target}'`)
             const result = Object.fromEntries([
                 ["번호", Number(target)],
                 ...problem
@@ -51,6 +54,7 @@ export async function download(targets: number[]) {
                     }
                 ),
             )
+            success(`Generate 'problem/${target}/problem.yaml'`)
         }
     ))
 

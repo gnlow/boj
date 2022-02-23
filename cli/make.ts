@@ -1,4 +1,8 @@
+import { progress, success } from "./util/log.ts"
+
 export async function make(targets: number[]) {
+    progress("Start >make")
+
     const defaultCode = 
     `import { flow } from "fp/function.ts"
     import { simplify } from "util/simplify.ts"
@@ -12,9 +16,9 @@ export async function make(targets: number[]) {
             const path = `problem/${target}/`
             await Deno.mkdir(path)
             await Promise.all([
-                Deno.writeTextFile(path + "main.ts", defaultCode),
-                Deno.writeTextFile(path + "test.yaml", "")
+                Deno.writeTextFile(path + "main.ts", defaultCode)
             ])
+            success(`Generate '${path}main.ts'`)
         }
     ))
 }

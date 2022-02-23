@@ -1,7 +1,9 @@
+import { success, progress } from "./util/log.ts"
 import { assertEquals } from "https://deno.land/std@0.125.0/testing/asserts.ts"
 import { parse } from "https://deno.land/std@0.125.0/encoding/yaml.ts"
 
 export async function test(targets: number[]) {
+    progress("Start >test")
     await Promise.all(targets.map(
         target => Deno.test(
             `Problem #${target}`,
@@ -16,6 +18,10 @@ export async function test(targets: number[]) {
                         .then((x: any) => x.예제)
                         .catch(() => ({})) as Record<string, unknown>
                 }
+                progress([
+                    `Load 'problem/${target}/test.yaml'`,
+                    `Load 'problem/${target}/problem.yaml'`,
+                ])
                 await Promise.all(Object.entries(cases).map(
                     ([input, output], i) => t.step({
                         name: `Case #${i}\n  ${input}  ->  ${output}`,
@@ -27,6 +33,7 @@ export async function test(targets: number[]) {
                         sanitizeExit: false,
                     })
                 ))
+                success(`End testing #${target}`)
             }
         )
     ))
