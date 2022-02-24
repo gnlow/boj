@@ -2,19 +2,17 @@ import { success, progress } from "./util/log.ts"
 import pptr, * as P from "https://deno.land/x/puppeteer@9.0.2/mod.ts"
 import { stringify } from "https://deno.land/std@0.126.0/encoding/yaml.ts"
 
-export async function download(targets: number[]) {
-    progress("Start >download")
-    const wsChromeEndpoint = "ws://localhost:9222/devtools/browser/634a8d6e-cbd2-4203-b588-ee93f9428294"
+export const download =
+    (pages: P.Page[]) =>
+    async function(targets: number[]) {
+        for await (const [i, target] of targets.entries()) {
+            const page = pages[i]
+            await page.bringToFront()
 
-    const browser = await pptr.connect({
-        browserWSEndpoint: wsChromeEndpoint,
-    })
-    progress("Connect to browser")
-    const page = await browser.newPage()
-    progress("Open new tab")
-    await Promise.all(targets.map(
-        async target => {
-            await page.goto(`https://www.acmicpc.net/problem/${target}`)
+            const targetUrl = `https://www.acmicpc.net/problem/${target}`
+            if (page.url() != targetUrl) {
+                await page.goto(targetUrl)
+            }
             await page.content()
 
             const examples: (string | number)[][] = []
@@ -56,69 +54,68 @@ export async function download(targets: number[]) {
             )
             success(`Generate 'problem/${target}/problem.yaml'`)
         }
-    ))
 
-    async function getProblemTitle(page: P.Page) {
-        const titleData = await page.$("#problem_title")
-        const result = await titleData?.evaluate((e): string => e.textContent)
+        async function getProblemTitle(page: P.Page) {
+            const titleData = await page.$("#problem_title")
+            const result = await titleData?.evaluate((e): string => e.textContent)
 
-        return ["제목", result!]
-    }
-    async function getProblemInfo(page: P.Page) {
-        const keyData = await page.$$("#problem-info th")
-        const valData = await page.$$("#problem-info td")
+            return ["제목", result!]
+        }
+        async function getProblemInfo(page: P.Page) {
+            const keyData = await page.$$("#problem-info th")
+            const valData = await page.$$("#problem-info td")
 
-        const key = await Promise.all(keyData.map(
-            async el =>
-                await el.evaluate(
-                    (e): string => e.textContent.trim()
-                )
-        ))
-        const val = await Promise.all(valData.map(
-            async el =>
-                await el.evaluate(
-                    (e): string => e.textContent.trim()
-                )
-        ))
-        const result = key.map((k, i) => [k, val[i]])
-        return result
-    }
-    async function getProblemBody(page: P.Page) {
-        const data = await page.$$("#problem-body section")
+            const key = await Promise.all(keyData.map(
+                async el =>
+                    await el.evaluate(
+                        (e): string => e.textContent.trim()
+                    )
+            ))
+            const val = await Promise.all(valData.map(
+                async el =>
+                    await el.evaluate(
+                        (e): string => e.textContent.trim()
+                    )
+            ))
+            const result = key.map((k, i) => [k, val[i]])
+            return result
+        }
+        async function getProblemBody(page: P.Page) {
+            const data = await page.$$("#problem-body section")
 
-        const contents = await Promise.all(data.map(
-            async el => [
-                await $evaluate(
-                    el,
-                    ".headline > h2",
-                    (e): string =>
-                        e.childNodes[0].textContent.trim()
-                ),
-                await $evaluate(
-                    el,
-                    "div:not(.headline), pre",
-                    (e): string =>
-                        e.innerText.trim()
-                ),
-            ]
-        ))
+            const contents = await Promise.all(data.map(
+                async el => [
+                    await $evaluate(
+                        el,
+                        ".headline > h2",
+                        (e): string =>
+                            e.childNodes[0].textContent.trim()
+                    ),
+                    await $evaluate(
+                        el,
+                        "div:not(.headline), pre",
+                        (e): string =>
+                            e.innerText.trim()
+                    ),
+                ]
+            ))
 
-        return contents
-    }
+            return contents
+        }
 
-    async function $evaluate<T>(
-        el: P.ElementHandle,
-        selector: string,
-        fn: (e: any) => T,
-    ) {
-        return (await el.$(selector))!.evaluate(fn)
-    }
+        async function $evaluate<T>(
+            el: P.ElementHandle,
+            selector: string,
+            fn: (e: any) => T,
+        ) {
+            return (await el.$(selector))!.evaluate(fn)
+        }
 
-    function toNumber(str: string) {
-        if (Number.isNaN(Number(str))){
-            return str
-        } else {
-            return Number(str)
+        function toNumber(str: string) {
+            if (Number.isNaN(Number(str))){
+                return str
+            } else {
+                return Number(str)
+            }
         }
     }
-}
