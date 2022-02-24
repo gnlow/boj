@@ -8,12 +8,13 @@ export async function launch() {
     const { webSocketDebuggerUrl: wsUrl } =
         await fetch(`http://localhost:${PORT}/json/version`)
             .then(x => x.json())
-            .catch(() => undefined)
+            .catch(() => ({}))
     
     let browser: P.Browser
     if (wsUrl) {
         browser = await pptr.connect({
             browserWSEndpoint: wsUrl,
+            defaultViewport: null,
         })
         progress("Connect to existing browser")
     } else {
@@ -25,9 +26,9 @@ export async function launch() {
             ],
         })
         progress("Launch new browser")
+        const [page] = await browser.pages()
+        await page.goto("https://solved.ac/login?prev=%2Fclass")
     }
-    const [page] = await browser.pages()
-    await page.goto("https://solved.ac/login?prev=%2Fclass")
     success("Launch")
     return browser
 }

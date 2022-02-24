@@ -84,23 +84,25 @@ export const download =
             const data = await page.$$("#problem-body section")
 
             const contents = await Promise.all(data.map(
-                async el => [
-                    await $evaluate(
-                        el,
-                        ".headline > h2",
-                        (e): string =>
-                            e.childNodes[0].textContent.trim()
-                    ),
-                    await $evaluate(
-                        el,
-                        "div:not(.headline), pre",
-                        (e): string =>
-                            e.innerText.trim()
-                    ),
-                ]
+                async el => {
+                    try {
+                        return [
+                            await el.$eval(
+                                ".headline > h2",
+                                e => e.childNodes[0].textContent.trim()
+                            ) as unknown as string,
+                            await el.$eval(
+                                "div:not(.headline), pre",
+                                e => e.innerText.trim()
+                            ) as unknown as string,
+                        ]
+                    } catch {
+                        return null
+                    }
+                }
             ))
 
-            return contents
+            return contents.filter(x => x) as string[][]
         }
 
         async function $evaluate<T>(
