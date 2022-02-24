@@ -19,7 +19,10 @@ export const simplifyNs = simple(Number)
 export const simplify = simple(x => x)
 
 export const print =
-(nss: (number | string)[][]) =>
+(nss: (number | string)[][] | (number | string)[]) =>
     nss.map(
-        ns => ns.join(" ")
+        ns =>
+            typeof ns == "object"
+                ? ns.join(" ")
+                : ns
     ).join("\n")
