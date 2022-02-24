@@ -5,7 +5,7 @@ export async function launch() {
         headless: false,
         defaultViewport: null,
     })
-    //const context = await browser.createIncognitoBrowserContext()
-    
+    const [page] = await browser.pages()
+    await page.goto("https://www.acmicpc.net/login")
     return browser
 }

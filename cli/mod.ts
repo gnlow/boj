@@ -1,3 +1,8 @@
+import {
+    pipe as $, b, i, c,
+    darkorange,
+} from "https://denopkg.com/gnlow/blue/mod.ts"
+
 import pptr, * as P from "https://deno.land/x/puppeteer@9.0.2/mod.ts"
 import { launch } from "./util/launch.ts"
 import { progress } from "./util/log.ts"
@@ -39,24 +44,29 @@ async function view(targets: number[]) {
     ))
 }
 
-const commands = {
-    bundle,
-    b: bundle,
+function hilitFirst(str: string) {
+    const [first, ...rest] = str
+    return c(darkorange)($(b, i)(first) + rest.join(""))
+}
 
-    download: download(pages),
-    d: download(pages),
+const commands = {
+    view,
+    v: view,
 
     make,
     m: make,
 
-    purify,
-    p: purify,
+    download: download(pages),
+    d: download(pages),
 
     test,
     t: test,
 
-    view,
-    v: view,
+    purify,
+    p: purify,
+
+    bundle,
+    b: bundle,
 }
 
 let targets: number[] = []
@@ -64,9 +74,9 @@ let targets: number[] = []
 while (true) {
     const answer = prompt(
         [
-            ...Object.keys(commands),
-            "quit", "q",
-        ].join(", ")
+            ...Object.keys(commands).filter(x => x.length != 1),
+            "quit",
+        ].map(hilitFirst).join(" / ")
         + "\n targets: "
         + targets.join(" ")
         + "\n"
