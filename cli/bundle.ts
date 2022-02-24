@@ -115,11 +115,6 @@ export async function bundle(targets: number[]) {
                 --config-file terser.config.json
             `)
             progress(`Minify 'dist/${target}.js' -> 'dist/${target}.min.js'`)
-            await run(`
-                cmd /c
-                code dist/${target}.min.js
-            `)
-            success(`Open dist/${target}.min.js`)
         }
     ))
 }
