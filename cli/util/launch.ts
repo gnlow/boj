@@ -6,6 +6,6 @@ export async function launch() {
         defaultViewport: null,
     })
     const [page] = await browser.pages()
-    await page.goto("https://www.acmicpc.net/login")
+    await page.goto("https://solved.ac/login")
     return browser
 }
