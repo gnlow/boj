@@ -1,11 +1,12 @@
 import { progress, success } from "./util/log.ts"
+import { run } from "./util/run.ts"
 
 const defaultCode = 
 `import { flow } from "fp/function.ts"
-import { simplify } from "util/simplify.ts"
+import { simplifyNs, print } from "util/simplify.ts"
 
 export const main = flow(
-    simplify,
+    simplifyNs,
 )`
 
 export async function make(targets: number[]) {
@@ -18,6 +19,11 @@ export async function make(targets: number[]) {
                 Deno.writeTextFile(path + "main.ts", defaultCode)
             ])
             success(`Generate '${path}main.ts'`)
+            await run(`
+                cmd /c
+                code ${path}main.ts
+            `)
+            success(`Open ${path}main.ts`)
         }
     ))
 }
