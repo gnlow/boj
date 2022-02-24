@@ -18,8 +18,12 @@ const simple =
 export const simplifyNs = simple(Number)
 export const simplify = simple(x => x)
 
+type Data = number | string
+type SsOrS<T> = T[][] | T[]
+type RSsOrS<T> = readonly (readonly T[])[] | readonly T[]
+
 export const print =
-(nss: (number | string)[][] | (number | string)[]) =>
+(nss: SsOrS<Data> | RSsOrS<Data>) =>
     nss.map(
         ns =>
             typeof ns == "object"
