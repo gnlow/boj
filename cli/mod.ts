@@ -11,6 +11,7 @@ import { download } from "./download.ts"
 import { make } from "./make.ts"
 import { purify } from "./purify.ts"
 import { test } from "./test.ts"
+import { upload } from "./upload.ts"
 import { view } from "./view.ts"
 
 const browser = await launch()
@@ -40,6 +41,9 @@ const commands = {
 
     bundle,
     b: bundle,
+
+    upload: upload(pages),
+    u: upload(pages),
 }
 
 let targets: number[] = []
