@@ -17,3 +17,9 @@ const simple =
     )
 export const simplifyNs = simple(Number)
 export const simplify = simple(x => x)
+
+export const print =
+(nss: (number | string)[][]) =>
+    nss.map(
+        ns => ns.join(" ")
+    ).join("\n")

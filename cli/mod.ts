@@ -64,6 +64,10 @@ while (true) {
         targets = answer.split(" ").map(Number)
     } else if (answer in commands) {
         console.log("do: " + answer)
-        await commands[answer as keyof typeof commands](targets)
+        try {
+            await commands[answer as keyof typeof commands](targets)
+        } catch (e) {
+            console.error(e)
+        }
     }
 }
