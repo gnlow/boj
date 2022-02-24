@@ -5,44 +5,17 @@ import {
 
 import pptr, * as P from "https://deno.land/x/puppeteer@9.0.2/mod.ts"
 import { launch } from "./util/launch.ts"
-import { progress } from "./util/log.ts"
 
 import { bundle } from "./bundle.ts"
 import { download } from "./download.ts"
 import { make } from "./make.ts"
 import { purify } from "./purify.ts"
 import { test } from "./test.ts"
+import { view } from "./view.ts"
 
 const browser = await launch()
 
 const pages: P.Page[] = []
-
-async function openPage() {
-    const page = await browser.newPage()
-    pages.push(page)
-    return page
-}
-async function closePage() {
-    await pages[pages.length - 1].close()
-    pages.pop()
-}
-
-async function view(targets: number[]) {
-    while (targets.length < pages.length) {
-        await closePage()
-        progress("Close tab")
-    }
-
-    while (pages.length < targets.length) {
-        await openPage()
-        progress("Open tab")
-    }
-    await Promise.all(pages.map(
-        async (page, i) => {
-            page.goto(`https://www.acmicpc.net/problem/${targets[i]}`)
-        }
-    ))
-}
 
 function hilitFirst(str: string) {
     const [first, ...rest] = str
@@ -50,8 +23,8 @@ function hilitFirst(str: string) {
 }
 
 const commands = {
-    view,
-    v: view,
+    view: view(pages, browser),
+    v: view(pages, browser),
 
     make,
     m: make,
