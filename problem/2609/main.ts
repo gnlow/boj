@@ -1,6 +1,6 @@
 import { flow } from "fp/function.ts"
 import { simplifyNs, print } from "util/simplify.ts"
-import { primes } from "util/primes.ts"
+import { primesLess10k as primes } from "util/primes.ts"
 
 const below = (n: number) => n % 1
 const divisible = (b: number, a: number) => below(b / a) == 0
