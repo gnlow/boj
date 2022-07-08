@@ -1,6 +1,6 @@
 import { success, progress } from "./util/log.ts"
-import { assertEquals } from "https://deno.land/std@0.125.0/testing/asserts.ts"
-import { parse } from "https://deno.land/std@0.125.0/encoding/yaml.ts"
+import { assertEquals } from "https://deno.land/std@0.147.0/testing/asserts.ts"
+import { parse } from "https://deno.land/std@0.147.0/encoding/yaml.ts"
 
 const targets = Deno.args
 
