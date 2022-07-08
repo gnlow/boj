@@ -15,8 +15,8 @@ const simple =
             )
         )
     )
-export const simplifyNs = simple(Number)
-export const simplify = simple(x => x)
+export const simplifyNs = simple(Number) as (s: string) => number[][]
+export const simplify = simple(x => x) as (s: string) => string[][]
 
 type Data = number | string
 type SsOrS<T> = T[][] | T[]
