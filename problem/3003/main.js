@@ -1,0 +1,1 @@
+console.log((require("fs").readFileSync(0)+"").split` `.map((x,i)=>[1,1,2,2,2,8][i]-Number(x)).join` `)
