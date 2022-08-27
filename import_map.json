@@ -1,7 +1,7 @@
 {
     "imports": {
         "fp/": "https://denopkg.com/gnlow/deno-fp-ts/src/",
-        "util/": "./util/",
-        "tool": "./util/tool.ts"
+        "tool": "./util/v0.1.0/tool.ts",
+        "util/": "./util/v0.1.0"
     }
 }
